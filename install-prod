@@ -29,6 +29,8 @@ if [ "${#SETUP_ERRORS[*]}" > 0 ]; then
       echo "$SETUP_ERROR"
     done
   } > "/var/log/install-script-errors.log" 2>&1
+
+  exit
 fi
 
 HEADLESS=true
@@ -50,6 +52,33 @@ export RELAY_DIR
 export DOCKER_DIR
 export DEPLOY_ENV
 export SITE_USER
+export GIT_REPO
+export SITE_USER_RSA_PRIV_KEY_VALUE
+export SITE_USER_RSA_PUB_KEY_VALUE
+
+# This sets the variable $IPADDR to the IP address the new Linode receives.
+IPADDR=$(/sbin/ifconfig eth0 | awk '/inet / { print $2 }' | sed 's/addr://')
+
+# This updates the packages on the system from the distribution repositories.
+apt-get update
+apt-get upgrade -y
+
+# This section sets the hostname.
+echo $HOSTNAME > /etc/hostname
+hostname -F /etc/hostname
+
+# Docker
+apt-get install docker.io
+
+systemctl start docker
+systemctl enable docker
+
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+# This section sets the Fully Qualified Domain Name (FQDN) in the hosts file.
+echo $IPADDR $FQDN $HOSTNAME >> /etc/hosts
+
+apt-get install git -y
 
 bash <(wget -qO - https://raw.githubusercontent.com/jfdialogs/linode-scripts/install-site-user)
 
