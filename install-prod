@@ -35,7 +35,7 @@ if [ -z "$SITE_USER_RSA_PUB_KEY_VALUE" ]; then
   SETUP_ERRORS+="SITE_USER_RSA_PUB_KEY_VALUE variable is required."
 fi
 
-if [ "${#SETUP_ERRORS[*]}" > 0 ]; then
+if [ "${#SETUP_ERRORS[*]}" -gt 0 ]; then
   touch "$INSTALL_ERROR_LOG"
 
   echo "$(date '+%m-%d-%Y %T')" >> $INSTALL_ERROR_LOG
