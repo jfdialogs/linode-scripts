@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+
+# <UDF name="DEPLOY_ENV" default="prod" label="What is the deploy env (dev, prod)?" />
+# <UDF name="SITE_USER" default="web" label="What is the site username?" />
+# <UDF name="GIT_REPO" label="What is the git repo ssh address (format?" example="git@github.com:[domain]/[project-name].git)" />
+# <UDF name="SITE_USER_RSA_PRIV_KEY_VALUE" label="What is the SITE_USER private key value?" />
+# <UDF name="SITE_USER_RSA_PUB_KEY_VALUE" label="What is the SITE_USER public key value?" />
+
+HEADLESS=true
+PROJECT_DIR="/deploy-repo"
+RELAY_DIR="/deploy-relay"
+DOCKER_DIR="$PROJECT_DIR/docker"
+
+APP_ENV=prod
+
+if [ "$DEPLOY_ENV" == "dev" ]; then
+  DEPLOY_BRANCH=main-edge
+elif [ "$DEPLOY_ENV" == "prod" ]; then
+  DEPLOY_BRANCH=main-stable
+fi
+
+export HEADLESS
+export PROJECT_DIR
+export RELAY_DIR
+export DOCKER_DIR
+export DEPLOY_ENV
+export SITE_USER
+
+bash <(wget -qO - https://raw.githubusercontent.com/jfdialogs/linode-scripts/install-site-user)
+
+HAS_SITE_USER="$(getent passwd $SITE_USER)"
+
+if [ -d "$PROJECT_DIR" ]; then
+  rm -d "$PROJECT_DIR"
+fi
+
+if [ -d "$RELAY_DIR" ]; then
+  rm -d "$RELAY_DIR"
+fi
+
+mkdir "$PROJECT_DIR"
+mkdir "$RELAY_DIR"
+
+chown -R "$SITE_USER" "$PROJECT_DIR"
+chown -R "$SITE_USER" "$RELAY_DIR"
+chgrp -R "$SITE_USER" "$PROJECT_DIR"
+chgrp -R "$SITE_USER" "$RELAY_DIR"
+
+git config --global http.postBuffer 524288000
+
+su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
+
+#"$DOCKER_DIR/server" init-prod && echo ""
+#"$DOCKER_DIR/server" install-hooks && echo ""
+#"$DOCKER_DIR/server" own-project && echo ""
+#"$DOCKER_DIR/server" setup-volume && echo ""
+#
+#cd "$PROJECT_DIR"
+#
+#source "$PROJECT_DIR/.env"
+#source "$PROJECT_DIR/.env.prod"
+#
+#export PROD_DB_HOST
+#export PROD_DB_PORT
+#export PROD_DB_NAME
+#export PROD_DB_USER
+#export PROD_DB_PASSWORD
+#
+#ln -s "$PROJECT_DIR" /app
+#chown www-data /app
+#chgrp www-data /app
