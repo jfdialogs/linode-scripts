@@ -1,13 +1,38 @@
 #!/usr/bin/env bash
 
-# <UDF name="DEPLOY_ENV" default="prod" label="What is the deploy env (dev, prod)?" />
-# <UDF name="SITE_USER" default="web" label="What is the site username?" />
-# <UDF name="GIT_REPO" label="What is the git repo ssh address (format?" example="git@github.com:[domain]/[project-name].git)" />
-# <UDF name="SITE_USER_RSA_PRIV_KEY_VALUE" label="What is the SITE_USER private key value?" />
-# <UDF name="SITE_USER_RSA_PUB_KEY_VALUE" label="What is the SITE_USER public key value?" />
+SETUP_ERRORS=()
+
+if [ -z "$DEPLOY_ENV" ]; then
+  SETUP_ERRORS+="DEPLOY_ENV variable is required."
+fi
+
+if [ -z "$SITE_USER" ]; then
+  SETUP_ERRORS+="SITE_USER variable is required."
+fi
+
+if [ -z "$GIT_REPO" ]; then
+  SETUP_ERRORS+="GIT_REPO variable is required."
+fi
+
+if [ -z "$SITE_USER_RSA_PRIV_KEY_VALUE" ]; then
+  SETUP_ERRORS+="SITE_USER_RSA_PRIV_KEY_VALUE variable is required."
+fi
+
+if [ -z "$SITE_USER_RSA_PUB_KEY_VALUE" ]; then
+  SETUP_ERRORS+="SITE_USER_RSA_PUB_KEY_VALUE variable is required."
+fi
+
+if [ "${#SETUP_ERRORS[*]}" > 0 ]; then
+  {
+    for SETUP_ERROR in "${SETUP_ERRORS[@]}"
+    do
+      echo "$SETUP_ERROR"
+    done
+  } > "/var/log/install-script-errors.log" 2>&1
+fi
 
 HEADLESS=true
-PROJECT_DIR="/deploy-repo"
+PROJECT_DIR="/app"
 RELAY_DIR="/deploy-relay"
 DOCKER_DIR="$PROJECT_DIR/docker"
 
