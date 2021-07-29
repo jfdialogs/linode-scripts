@@ -26,7 +26,7 @@ if [ "${#SETUP_ERRORS[*]}" > 0 ]; then
   {
     for SETUP_ERROR in "${SETUP_ERRORS[@]}"
     do
-      echo "$SETUP_ERROR\n"
+      echo -e "$SETUP_ERROR\n"
     done
   } > "/var/log/install-script-errors.log" 2>&1
 
