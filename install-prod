@@ -26,6 +26,8 @@ fi
 if [ "${#SETUP_ERRORS[*]}" > 0 ]; then
   touch "$INSTALL_ERROR_LOG"
 
+  echo "$(date '+%m-%d-%Y %T')" >> $INSTALL_ERROR_LOG
+
   for SETUP_ERROR in "${SETUP_ERRORS[@]}"
   do
     echo "$SETUP_ERROR" >> "$INSTALL_ERROR_LOG"
