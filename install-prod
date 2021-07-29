@@ -68,15 +68,15 @@ export SITE_USER_RSA_PUB_KEY_VALUE
 IPADDR=$(/sbin/ifconfig eth0 | awk '/inet / { print $2 }' | sed 's/addr://')
 
 # This updates the packages on the system from the distribution repositories.
-apt-get update
-apt-get upgrade -y
+apt-get -y update
+apt-get -y upgrade
 
 # This section sets the hostname.
 echo $HOSTNAME > /etc/hostname
 hostname -F /etc/hostname
 
 # Docker
-apt-get install docker.io
+apt-get -y install docker.io
 
 systemctl start docker
 systemctl enable docker
@@ -86,7 +86,7 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 # This section sets the Fully Qualified Domain Name (FQDN) in the hosts file.
 echo $IPADDR $FQDN $HOSTNAME >> /etc/hosts
 
-apt-get install git -y
+apt-get -y install git
 
 bash <(wget -qO - https://raw.githubusercontent.com/jfdialogs/linode-scripts/install-site-user)
 
