@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+INSTALL_ERROR_LOG="/var/log/install-script-errors.log"
 SETUP_ERRORS=()
 
 if [ -z "$DEPLOY_ENV" ]; then
@@ -23,12 +24,12 @@ if [ -z "$SITE_USER_RSA_PUB_KEY_VALUE" ]; then
 fi
 
 if [ "${#SETUP_ERRORS[*]}" > 0 ]; then
-  {
-    for SETUP_ERROR in "${SETUP_ERRORS[@]}"
-    do
-      echo -e "$SETUP_ERROR\n"
-    done
-  } > "/var/log/install-script-errors.log" 2>&1
+  touch "$INSTALL_ERROR_LOG"
+
+  for SETUP_ERROR in "${SETUP_ERRORS[@]}"
+  do
+    echo "$SETUP_ERROR" >> "$INSTALL_ERROR_LOG"
+  done
 
   exit
 fi
