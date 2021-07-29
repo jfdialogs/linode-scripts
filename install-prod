@@ -68,7 +68,7 @@ export SITE_USER_RSA_PUB_KEY_VALUE
 IPADDR=$(/sbin/ifconfig eth0 | awk '/inet / { print $2 }' | sed 's/addr://')
 
 # This updates the packages on the system from the distribution repositories.
-apt-get -y update
+apt-get update
 apt-get -y upgrade
 
 # This section sets the hostname.
@@ -88,7 +88,7 @@ echo $IPADDR $FQDN $HOSTNAME >> /etc/hosts
 
 apt-get -y install git
 
-bash <(wget -qO - https://raw.githubusercontent.com/jfdialogs/linode-scripts/install-site-user)
+bash <(wget -qO - https://raw.githubusercontent.com/jfdialogs/linode-scripts/main/install-site-user)
 
 HAS_SITE_USER="$(getent passwd $SITE_USER)"
 
