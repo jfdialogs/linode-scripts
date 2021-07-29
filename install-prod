@@ -1,10 +1,17 @@
 #!/usr/bin/env bash
 
-INSTALL_ENV_VARS=""
+HEADLESS=true
+PROJECT_DIR="/app"
+RELAY_DIR="/deploy-relay"
+DOCKER_DIR="$PROJECT_DIR/docker"
+
+APP_ENV=prod
+
+INSTALL_ENV_VARS="/home/root/.env-install"
 INSTALL_ERROR_LOG="/var/log/install-script-errors.log"
 SETUP_ERRORS=()
 
-if [ =f "$INSTALL_ENV_VARS" ]; then
+if [[ -f "$INSTALL_ENV_VARS" ]]; then
   source "$INSTALL_ENV_VARS"
 fi
 
@@ -41,13 +48,6 @@ if [ "${#SETUP_ERRORS[*]}" > 0 ]; then
 
   exit
 fi
-
-HEADLESS=true
-PROJECT_DIR="/app"
-RELAY_DIR="/deploy-relay"
-DOCKER_DIR="$PROJECT_DIR/docker"
-
-APP_ENV=prod
 
 if [ "$DEPLOY_ENV" == "dev" ]; then
   DEPLOY_BRANCH=main-edge
