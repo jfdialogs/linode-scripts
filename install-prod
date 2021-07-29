@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 
+INSTALL_ENV_VARS=""
 INSTALL_ERROR_LOG="/var/log/install-script-errors.log"
 SETUP_ERRORS=()
+
+if [ =f "$INSTALL_ENV_VARS" ]; then
+  source "$INSTALL_ENV_VARS"
+fi
 
 if [ -z "$DEPLOY_ENV" ]; then
   SETUP_ERRORS+="DEPLOY_ENV variable is required."
