@@ -36,7 +36,7 @@ function make_site_user {
   echo "$SITE_USER_RSA_PRIV_KEY_VALUE" > "$SITE_USER_RSA_PRIV_KEY"
   echo "$SITE_USER_RSA_PUB_KEY_VALUE" > "$SITE_USER_RSA_PUB_KEY"
 
-  chmod 0600 "$SITE_USER_RSA_PRIV_KEY_VALUE"
+  chmod 0600 "$SITE_USER_RSA_PRIV_KEY"
 
   eval $(ssh-agent -s)
   ssh-add "$SITE_USER_RSA_PRIV_KEY"
