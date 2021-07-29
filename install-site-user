@@ -33,8 +33,8 @@ function make_site_user {
       echo "$GITHUB_KEY_IP" >> "$KNOWN_HOSTS"
   done
 
-  echo "$SITE_USER_RSA_PRIV_KEY_VALUE" > "SITE_USER_RSA_PRIV_KEY"
-  echo "$SITE_USER_RSA_PUB_KEY_VALUE" > "SITE_USER_RSA_PUB_KEY"
+  echo "$SITE_USER_RSA_PRIV_KEY_VALUE" > "$SITE_USER_RSA_PRIV_KEY"
+  echo "$SITE_USER_RSA_PUB_KEY_VALUE" > "$SITE_USER_RSA_PUB_KEY"
 
   eval $(ssh-agent -s)
   ssh-add "$SITE_USER_RSA_PRIV_KEY"
@@ -50,17 +50,6 @@ function make_site_user {
   usermod -aG sudo "$SITE_USER"
 
   echo "$SITE_USER ALL=(ALL:ALL) NOPASSWD: ALL" | sudo tee "/etc/sudoers.d/$SITE_USER"
-
-  echo "Copy and paste the following $SITE_USER public key into the project's"
-  echo "Github repository Deploy Keys config:"
-  echo ""
-
-  cat "$SITE_USER_RSA_PUB_KEY"
-
-  echo ""
-  echo "Hit ENTER to continue."
-
-  read NOTHING
 
   service sshd restart
 }
