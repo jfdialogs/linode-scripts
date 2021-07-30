@@ -81,8 +81,13 @@ apt-get -y upgrade
 echo $HOSTNAME > /etc/hostname
 hostname -F /etc/hostname
 
+# For latest Docker Compose
+add-apt-repository universe
+apt-get -y install python3-pip
+pip3 install docker-compose
+
 # Docker
-apt-get -y install docker.io docker-compose
+#apt-get -y install docker.io
 
 systemctl start docker
 systemctl enable docker
