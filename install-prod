@@ -4,6 +4,7 @@ PROJECT_DIR="/app"
 RELAY_DIR="/deploy-relay"
 DOCKER_DIR="$PROJECT_DIR/docker"
 
+# Remote is always prod
 APP_ENV=prod
 
 INSTALL_ENV_VARS="/root/.env-install"
