@@ -82,7 +82,7 @@ echo $HOSTNAME > /etc/hostname
 hostname -F /etc/hostname
 
 # Docker
-apt-get -y install docker.io
+apt-get -y install docker.io docker-compose
 
 systemctl start docker
 systemctl enable docker
@@ -105,6 +105,8 @@ fi
 
 mkdir "$PROJECT_DIR"
 mkdir "$RELAY_DIR"
+
+cd "$PROJECT_DIR"
 
 chown -R "$SITE_USER" "$PROJECT_DIR"
 chown -R "$SITE_USER" "$RELAY_DIR"
