@@ -4,6 +4,9 @@
 
 function make_site_user {
   SITE_USER="$1"
+  SITE_USER_RSA_PRIV_KEY_VALUE="$2"
+  SITE_USER_RSA_PUB_KEY_VALUE="$3"
+
   SITE_USER_HOME="/home/$SITE_USER"
   SITE_USER_SSH_DIR="$SITE_USER_HOME/.ssh"
   SITE_USER_RSA_PRIV_KEY="$SITE_USER_SSH_DIR/id_rsa"
@@ -64,4 +67,4 @@ function make_site_user {
   service sshd restart
 }
 
-make_site_user "$SITE_USER"
+make_site_user "$SITE_USER" "$SITE_USER_RSA_PRIV_KEY_VALUE" "$SITE_USER_RSA_PUB_KEY_VALUE"

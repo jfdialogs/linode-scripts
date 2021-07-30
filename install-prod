@@ -1,6 +1,5 @@
 #!/usr/bin/env bash
 
-HEADLESS=true
 PROJECT_DIR="/app"
 RELAY_DIR="/deploy-relay"
 DOCKER_DIR="$PROJECT_DIR/docker"
@@ -9,10 +8,14 @@ APP_ENV=prod
 
 INSTALL_ENV_VARS="/root/.env-install"
 INSTALL_ERROR_LOG="/var/log/install-script-errors.log"
+
 SETUP_ERRORS=()
 
-if [[ -f "$INSTALL_ENV_VARS" ]]; then
+if [ -f "$INSTALL_ENV_VARS" ]; then
   source "$INSTALL_ENV_VARS"
+
+  # Delete .env-install file
+  rm "$INSTALL_ENV_VARS"
 fi
 
 if [ -z "$DEPLOY_ENV" ]; then
@@ -54,7 +57,6 @@ elif [ "$DEPLOY_ENV" == "prod" ]; then
   DEPLOY_BRANCH=main-stable
 fi
 
-export HEADLESS
 export PROJECT_DIR
 export RELAY_DIR
 export DOCKER_DIR
@@ -66,6 +68,9 @@ export SITE_USER_RSA_PUB_KEY_VALUE
 
 # This sets the variable $IPADDR to the IP address the new Linode receives.
 IPADDR=$(/sbin/ifconfig eth0 | awk '/inet / { print $2 }' | sed 's/addr://')
+
+# This section sets the Fully Qualified Domain Name (FQDN) in the hosts file.
+echo $IPADDR $FQDN $HOSTNAME >> /etc/hosts
 
 # This updates the packages on the system from the distribution repositories.
 apt-get update
@@ -83,10 +88,7 @@ systemctl enable docker
 
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 
-# This section sets the Fully Qualified Domain Name (FQDN) in the hosts file.
-echo $IPADDR $FQDN $HOSTNAME >> /etc/hosts
-
-apt-get -y install git
+apt-get -y install git mlocate
 
 bash <(wget -qO - https://raw.githubusercontent.com/jfdialogs/linode-scripts/main/install-site-user)
 
@@ -112,22 +114,13 @@ git config --global http.postBuffer 524288000
 
 su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
 
-#"$DOCKER_DIR/server" init-prod && echo ""
-#"$DOCKER_DIR/server" install-hooks && echo ""
-#"$DOCKER_DIR/server" own-project && echo ""
-#"$DOCKER_DIR/server" setup-volume && echo ""
-#
-#cd "$PROJECT_DIR"
-#
-#source "$PROJECT_DIR/.env"
-#source "$PROJECT_DIR/.env.prod"
-#
-#export PROD_DB_HOST
-#export PROD_DB_PORT
-#export PROD_DB_NAME
-#export PROD_DB_USER
-#export PROD_DB_PASSWORD
-#
-#ln -s "$PROJECT_DIR" /app
-#chown www-data /app
-#chgrp www-data /app
+"$DOCKER_DIR/server" install-remote-prod
+"$DOCKER_DIR/server" install-hooks
+
+cd "$PROJECT_DIR"
+
+source "$PROJECT_DIR/.env"
+
+ln -s "$PROJECT_DIR" "$PROJECT_DIR"
+chown www-data "$PROJECT_DIR"
+chgrp www-data "$PROJECT_DIR"
