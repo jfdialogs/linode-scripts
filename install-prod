@@ -121,6 +121,5 @@ cd "$PROJECT_DIR"
 
 source "$PROJECT_DIR/.env"
 
-ln -s "$PROJECT_DIR" "$PROJECT_DIR"
 chown www-data "$PROJECT_DIR"
 chgrp www-data "$PROJECT_DIR"
