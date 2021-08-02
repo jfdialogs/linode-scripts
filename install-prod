@@ -3,6 +3,7 @@
 PROJECT_DIR="/app"
 RELAY_DIR="/deploy-relay"
 DOCKER_DIR="$PROJECT_DIR/docker"
+PROJECT_DIR_ENV="$PROJECT_DIR/.env"
 
 # Remote is always prod mode, to prevent debug in public
 APP_ENV=prod
@@ -140,7 +141,7 @@ DOMAIN="$DOCKER_DIR/server"
 
 cd "$PROJECT_DIR"
 
-source "$PROJECT_DIR/.env"
+source "$PROJECT_DIR_ENV"
 
-chown www-data "$PROJECT_DIR"
-chgrp www-data "$PROJECT_DIR"
+chown -R www-data "$PROJECT_DIR"
+chgrp -R www-data "$PROJECT_DIR"
