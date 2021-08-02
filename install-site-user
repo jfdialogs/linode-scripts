@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-INSTALL_SCRIPT_ERROR_LOG="/var/log/install-script-errors.log"
+INSTALL_ERROR_LOG="/var/log/install-script-errors.log"
 
 SETUP_ERRORS=()
 
@@ -17,15 +17,15 @@ if [ -z "SITE_USER_RSA_PUB_KEY_VALUE" ]; then
 fi
 
 if [ "${#SETUP_ERRORS[*]}" -gt 0 ]; then
-  touch "$INSTALL_SCRIPT_ERROR_LOG"
+  touch "$INSTALL_ERROR_LOG"
 
   LOG_TIME="$(date '+%m-%d-%Y %T')"
 
   for SETUP_ERROR in "${SETUP_ERRORS[@]}"
   do
-    echo "[$LOG_TIME] $SETUP_ERROR" >> "$INSTALL_SCRIPT_ERROR_LOG"
+    echo "[$LOG_TIME] $SETUP_ERROR" >> "$INSTALL_ERROR_LOG"
 
-    printf "\n%s\n" "Error(s) on installation. See $INSTALL_SCRIPT_ERROR_LOG for details."
+    printf "\n%s\n" "Error(s) on installation. See $INSTALL_ERROR_LOG for details."
   done
 
   exit 1
