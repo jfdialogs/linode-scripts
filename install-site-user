@@ -12,7 +12,7 @@ if [ -z "$SITE_USER_RSA_PRIV_KEY_VALUE" ]; then
   SETUP_ERRORS+="SITE_USER_RSA_PRIV_KEY_VALUE variable is required."
 fi
 
-if [ -z "SITE_USER_RSA_PUB_KEY_VALUE" ]; then
+if [ -z "$SITE_USER_RSA_PUB_KEY_VALUE" ]; then
   SETUP_ERRORS+="SITE_USER_RSA_PUB_KEY_VALUE variable is required."
 fi
 
