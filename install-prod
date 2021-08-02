@@ -130,13 +130,9 @@ chown -R "$SITE_USER" "$RELAY_DIR"
 chgrp -R "$SITE_USER" "$PROJECT_DIR"
 chgrp -R "$SITE_USER" "$RELAY_DIR"
 
-su - "$SITE_USER"
-
 git config --global http.postBuffer 524288000
 
-#su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
-
-git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR
+su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
 
 DOMAIN="$DOCKER_DIR/server"
 
@@ -147,5 +143,7 @@ cd "$PROJECT_DIR"
 
 source "$PROJECT_DIR_ENV"
 
-sudo chown -R www-data "$PROJECT_DIR"
-sudo chgrp -R www-data "$PROJECT_DIR"
+chown -R www-data "$PROJECT_DIR"
+chgrp -R www-data "$PROJECT_DIR"
+
+su - "$SITE_USER"
