@@ -4,20 +4,24 @@ PROJECT_DIR="/app"
 RELAY_DIR="/deploy-relay"
 DOCKER_DIR="$PROJECT_DIR/docker"
 
-# Remote is always prod
+# Remote is always prod mode, to prevent debug in public
 APP_ENV=prod
 
+INSTALL_TIME="$(date '+%m-%d-%Y %T')"
 INSTALL_ENV_VARS="/root/.env-install"
 INSTALL_ERROR_LOG="/var/log/install-script-errors.log"
 
 SETUP_ERRORS=()
 
 if [ -f "$INSTALL_ENV_VARS" ]; then
-  source "$INSTALL_ENV_VARS"
-
-  # Delete .env-install file
-  rm "$INSTALL_ENV_VARS"
+  SETUP_ERRORS+="Missing $INSTALL_ENV_VARS file."
 fi
+
+# Environment variables checked below are in the .env-install file.
+source "$INSTALL_ENV_VARS"
+
+# Delete .env-install file
+rm "$INSTALL_ENV_VARS"
 
 if [ -z "$DEPLOY_ENV" ]; then
   SETUP_ERRORS+="DEPLOY_ENV variable is required."
@@ -40,22 +44,22 @@ if [ -z "$SITE_USER_RSA_PUB_KEY_VALUE" ]; then
 fi
 
 if [ "${#SETUP_ERRORS[*]}" -gt 0 ]; then
-  touch "$INSTALL_ERROR_LOG"
-
-  echo "$(date '+%m-%d-%Y %T')" >> $INSTALL_ERROR_LOG
+  touch "$INSTALL_SCRIPT_ERROR_LOG"
 
   for SETUP_ERROR in "${SETUP_ERRORS[@]}"
   do
-    echo "$SETUP_ERROR" >> "$INSTALL_ERROR_LOG"
+    echo "[$INSTALL_TIME] $SETUP_ERROR" >> "$INSTALL_SCRIPT_ERROR_LOG"
+
+    printf "\n%s\n" "Error(s) on installation. See $INSTALL_SCRIPT_ERROR_LOG for details."
   done
 
-  exit
+  exit 1
 fi
 
+DEPLOY_BRANCH="main-stable"
+
 if [ "$DEPLOY_ENV" == "dev" ]; then
-  DEPLOY_BRANCH=main-edge
-elif [ "$DEPLOY_ENV" == "prod" ]; then
-  DEPLOY_BRANCH=main-stable
+  DEPLOY_BRANCH="main-edge"
 fi
 
 export PROJECT_DIR
@@ -70,7 +74,7 @@ export SITE_USER_RSA_PUB_KEY_VALUE
 # This sets the variable $IPADDR to the IP address the new Linode receives.
 IPADDR=$(ip -4 addr show eth0 | awk '/inet / { print $2 }' | sed 's/addr://')
 
-# This section sets the Fully Qualified Domain Name (FQDN) in the hosts file.
+# This section sets the Fully Qualified DOMAIN Name (FQDN) in the hosts file.
 echo $IPADDR $FQDN $HOSTNAME >> /etc/hosts
 
 # This updates the packages on the system from the distribution repositories.
@@ -81,13 +85,13 @@ apt-get -y upgrade
 echo $HOSTNAME > /etc/hostname
 hostname -F /etc/hostname
 
+# Docker
+apt-get -y install docker.io
+
 # For latest Docker Compose
 add-apt-repository universe
 apt-get -y install python3-pip
 pip3 install docker-compose
-
-# Docker
-apt-get -y install docker.io
 
 systemctl start docker
 systemctl enable docker
@@ -96,7 +100,13 @@ curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o 
 
 apt-get -y install git mlocate
 
-bash <(wget -qO - https://raw.githubusercontent.com/jfdialogs/linode-scripts/main/install-site-user)
+INSTALL_SITE_USER="/root/install-site-user"
+
+wget -qO - https://raw.githubusercontent.com/jfdialogs/linode-scripts/main/install-site-user "$INSTALL_SITE_USER"
+
+chmod u+x "$INSTALL_SITE_USER"
+
+"$INSTALL_SITE_USER"
 
 HAS_SITE_USER="$(getent passwd $SITE_USER)"
 
@@ -115,6 +125,7 @@ cd "$PROJECT_DIR"
 
 chown -R "$SITE_USER" "$PROJECT_DIR"
 chown -R "$SITE_USER" "$RELAY_DIR"
+
 chgrp -R "$SITE_USER" "$PROJECT_DIR"
 chgrp -R "$SITE_USER" "$RELAY_DIR"
 
@@ -122,8 +133,10 @@ git config --global http.postBuffer 524288000
 
 su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
 
-"$DOCKER_DIR/server" install-remote-prod
-"$DOCKER_DIR/server" install-hooks
+DOMAIN="$DOCKER_DIR/server"
+
+"$DOMAIN" install-remote-prod
+"$DOMAIN" install-hooks
 
 cd "$PROJECT_DIR"
 
