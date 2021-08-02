@@ -122,8 +122,6 @@ fi
 mkdir "$PROJECT_DIR"
 mkdir "$RELAY_DIR"
 
-su - "$SITE_USER"
-
 cd "$PROJECT_DIR"
 
 chown -R "$SITE_USER" "$PROJECT_DIR"
@@ -131,6 +129,8 @@ chown -R "$SITE_USER" "$RELAY_DIR"
 
 chgrp -R "$SITE_USER" "$PROJECT_DIR"
 chgrp -R "$SITE_USER" "$RELAY_DIR"
+
+su - "$SITE_USER"
 
 git config --global http.postBuffer 524288000
 
@@ -147,5 +147,5 @@ cd "$PROJECT_DIR"
 
 source "$PROJECT_DIR_ENV"
 
-chown -R www-data "$PROJECT_DIR"
-chgrp -R www-data "$PROJECT_DIR"
+sudo chown -R www-data "$PROJECT_DIR"
+sudo chgrp -R www-data "$PROJECT_DIR"
