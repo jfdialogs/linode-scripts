@@ -111,6 +111,12 @@ chmod u+x "$INSTALL_SITE_USER"
 
 HAS_SITE_USER="$(getent passwd $SITE_USER)"
 
+if [ -z "$HAS_SITE_USER" ]; then
+  echo "Installation failed on missing site user $SITE_USER."
+
+  exit 1
+fi
+
 if [ -d "$PROJECT_DIR" ]; then
   rm -d "$PROJECT_DIR"
 fi
@@ -150,4 +156,11 @@ source "$PROJECT_DIR_ENV"
 chown -R www-data "$PROJECT_DIR"
 chgrp -R www-data "$PROJECT_DIR"
 
-su - "$SITE_USER"
+su -c "cd $PROJECT_DIR" - "$SITE_USER"
+
+cd "$PROJECT_DIR"
+
+## BW
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCy+nXYhd4+KNEQruNE6CzzDbAJ2BU5Osum5pJz5iLh/uxGhOPhQVYGcOvIB4qNTKEMnV26K7yHsos88631i7qUs7yFuet3esNA3hPpMo9JmaZhzwhaX5zdMawqJRFxZa1q6xdfDyRngYMYqbz5DEhWSRhizX/tjjB/p/wRuhqZy7Dw6caL/2ivvTmxzJpgPoyyO9rwvda7a72UCw0ncY2+DDpk0131GVr9osw+u6han/bQeo3IpV+dCuF2TtXO33lbjUm405bEEOt4lnvaQq/QjXQmgDvrdpnzE78A5PAEcCyTGKfFFPpWUS/bkbrjLem9b8hySaLLkFJlwOVOp81P toff@MACBOOKPRO-F516.home" > "/home/bickford/.ssh/authorized_keys"
+## JF
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+zP0sSYIn3dRuWdRKcrixx7XGYG6ABrLXZLTpob1ff9aVgOVzEdXcKi7WVluljeCgUnwSXE8Ul10g2WEzjrGFtHX0jM7LdLzPuW45ZGlyHeROUBeG0iHi4IUvOI+MXlng4qHhkB/9A9KN87Lb93R5z0eLoizqwF6t2Btyp9dhtmY4LofRERj1G/5E4jDFnY2SGlk1VYlliF1i+3/9J86OFxTBfCoc+az6Py1yfVZSf9ASfGlDgaWKwjYtN6HDfMwg3hxf05dW2lx5BwjZYWs/ClihEiKbOf7A/b1V0AHRkc0Q0mR7TrNnINvHgeWTkor2dWYraVw9o4bqEFlIyqmT jf@MacBook-Pro.local" >> "/home/bickford/.ssh/authorized_keys"
