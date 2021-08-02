@@ -122,6 +122,8 @@ fi
 mkdir "$PROJECT_DIR"
 mkdir "$RELAY_DIR"
 
+su - "$SITE_USER"
+
 cd "$PROJECT_DIR"
 
 chown -R "$SITE_USER" "$PROJECT_DIR"
@@ -132,7 +134,9 @@ chgrp -R "$SITE_USER" "$RELAY_DIR"
 
 git config --global http.postBuffer 524288000
 
-su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
+#su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
+
+git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR
 
 DOMAIN="$DOCKER_DIR/server"
 
