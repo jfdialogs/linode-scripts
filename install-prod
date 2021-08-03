@@ -146,10 +146,10 @@ echo ""
 
 DOMAIN="$DOCKER_DIR/server"
 
+cd "$PROJECT_DIR"
+
 "$DOMAIN" install-remote-prod
 "$DOMAIN" install-hooks
-
-cd "$PROJECT_DIR"
 
 source "$PROJECT_DIR_ENV"
 
