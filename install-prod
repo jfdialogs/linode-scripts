@@ -148,8 +148,8 @@ echo ""
 
 cd "$PROJECT_DIR"
 
-su -c "$DOMAIN install-remote-prod" - "$SITE_USER"
-su -c "$DOMAIN install-hooks" - "$SITE_USER"
+su -c "cd $PROJECT_DIR; $DOMAIN install-remote-prod;" - "$SITE_USER"
+su -c "cd $PROJECT_DIR; $DOMAIN install-hooks;" - "$SITE_USER"
 
 source "$PROJECT_DIR_ENV"
 
