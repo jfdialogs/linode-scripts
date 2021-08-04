@@ -148,16 +148,16 @@ echo ""
 
 cd "$PROJECT_DIR"
 
-#su -c "cd $PROJECT_DIR; $DOMAIN install-remote-prod;" - "$SITE_USER"
-#su -c "cd $PROJECT_DIR; $DOMAIN install-hooks;" - "$SITE_USER"
-#
-#source "$PROJECT_DIR_ENV"
-#
-#chown -R www-data "$PROJECT_DIR"
-#chgrp -R www-data "$PROJECT_DIR"
-#
-#su - "$SITE_USER"
-#
-#echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCy+nXYhd4+KNEQruNE6CzzDbAJ2BU5Osum5pJz5iLh/uxGhOPhQVYGcOvIB4qNTKEMnV26K7yHsos88631i7qUs7yFuet3esNA3hPpMo9JmaZhzwhaX5zdMawqJRFxZa1q6xdfDyRngYMYqbz5DEhWSRhizX/tjjB/p/wRuhqZy7Dw6caL/2ivvTmxzJpgPoyyO9rwvda7a72UCw0ncY2+DDpk0131GVr9osw+u6han/bQeo3IpV+dCuF2TtXO33lbjUm405bEEOt4lnvaQq/QjXQmgDvrdpnzE78A5PAEcCyTGKfFFPpWUS/bkbrjLem9b8hySaLLkFJlwOVOp81P toff@MACBOOKPRO-F516.home" > "/home/$SITE_USER/.ssh/authorized_keys"
-#echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+zP0sSYIn3dRuWdRKcrixx7XGYG6ABrLXZLTpob1ff9aVgOVzEdXcKi7WVluljeCgUnwSXE8Ul10g2WEzjrGFtHX0jM7LdLzPuW45ZGlyHeROUBeG0iHi4IUvOI+MXlng4qHhkB/9A9KN87Lb93R5z0eLoizqwF6t2Btyp9dhtmY4LofRERj1G/5E4jDFnY2SGlk1VYlliF1i+3/9J86OFxTBfCoc+az6Py1yfVZSf9ASfGlDgaWKwjYtN6HDfMwg3hxf05dW2lx5BwjZYWs/ClihEiKbOf7A/b1V0AHRkc0Q0mR7TrNnINvHgeWTkor2dWYraVw9o4bqEFlIyqmT jf@MacBook-Pro.local" >> "/home/$SITE_USER/.ssh/authorized_keys"
-#echo "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAsch05pJcSqZ4QHAFEwmQ0te7XWXL3IfiG1cNljOozuowKn7z7Of6zSshT5LTsPJoYTfizxs+t9KdG9SCTKpw9a3G8ZF/sE+cUHuzDaXiYyblrclgfAr2ouz2MBuQoCN9waTN1SpLAwxBd4CBzGuVU3EYcuCBa04UT22YgC5g6ptgKK4rX4NhFxMbcYqoxSjQB0kLx1Am5aLlBYGLj5rpQBhnwfOr7ajsEl+U9sSIFL7dCDPVw/j5rFSLVdafIgu/T8lcdGYWey92QDgy1YN9xOdRh/MbPnoLkpjUxCGRpoFgCZU+o4CgZLE5daxMotYjZ3rsxnwvZvQVFZZQuobGPw== md@dialogs.com:rsa-key-20200825" >> "/home/$SITE_USER/.ssh/authorized_keys"
+su -c "cd $PROJECT_DIR; $DOMAIN install-remote-prod;" - "$SITE_USER"
+su -c "cd $PROJECT_DIR; $DOMAIN install-hooks;" - "$SITE_USER"
+
+source "$PROJECT_DIR_ENV"
+
+chown -R www-data "$PROJECT_DIR"
+chgrp -R www-data "$PROJECT_DIR"
+
+su - "$SITE_USER"
+
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCy+nXYhd4+KNEQruNE6CzzDbAJ2BU5Osum5pJz5iLh/uxGhOPhQVYGcOvIB4qNTKEMnV26K7yHsos88631i7qUs7yFuet3esNA3hPpMo9JmaZhzwhaX5zdMawqJRFxZa1q6xdfDyRngYMYqbz5DEhWSRhizX/tjjB/p/wRuhqZy7Dw6caL/2ivvTmxzJpgPoyyO9rwvda7a72UCw0ncY2+DDpk0131GVr9osw+u6han/bQeo3IpV+dCuF2TtXO33lbjUm405bEEOt4lnvaQq/QjXQmgDvrdpnzE78A5PAEcCyTGKfFFPpWUS/bkbrjLem9b8hySaLLkFJlwOVOp81P toff@MACBOOKPRO-F516.home" > "/home/$SITE_USER/.ssh/authorized_keys"
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQC+zP0sSYIn3dRuWdRKcrixx7XGYG6ABrLXZLTpob1ff9aVgOVzEdXcKi7WVluljeCgUnwSXE8Ul10g2WEzjrGFtHX0jM7LdLzPuW45ZGlyHeROUBeG0iHi4IUvOI+MXlng4qHhkB/9A9KN87Lb93R5z0eLoizqwF6t2Btyp9dhtmY4LofRERj1G/5E4jDFnY2SGlk1VYlliF1i+3/9J86OFxTBfCoc+az6Py1yfVZSf9ASfGlDgaWKwjYtN6HDfMwg3hxf05dW2lx5BwjZYWs/ClihEiKbOf7A/b1V0AHRkc0Q0mR7TrNnINvHgeWTkor2dWYraVw9o4bqEFlIyqmT jf@MacBook-Pro.local" >> "/home/$SITE_USER/.ssh/authorized_keys"
+echo "ssh-rsa AAAAB3NzaC1yc2EAAAABJQAAAQEAsch05pJcSqZ4QHAFEwmQ0te7XWXL3IfiG1cNljOozuowKn7z7Of6zSshT5LTsPJoYTfizxs+t9KdG9SCTKpw9a3G8ZF/sE+cUHuzDaXiYyblrclgfAr2ouz2MBuQoCN9waTN1SpLAwxBd4CBzGuVU3EYcuCBa04UT22YgC5g6ptgKK4rX4NhFxMbcYqoxSjQB0kLx1Am5aLlBYGLj5rpQBhnwfOr7ajsEl+U9sSIFL7dCDPVw/j5rFSLVdafIgu/T8lcdGYWey92QDgy1YN9xOdRh/MbPnoLkpjUxCGRpoFgCZU+o4CgZLE5daxMotYjZ3rsxnwvZvQVFZZQuobGPw== md@dialogs.com:rsa-key-20200825" >> "/home/$SITE_USER/.ssh/authorized_keys"
