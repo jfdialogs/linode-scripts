@@ -5,6 +5,8 @@ RELAY_DIR="/deploy-relay"
 DOCKER_DIR="$PROJECT_DIR/docker"
 PROJECT_DIR_ENV="$PROJECT_DIR/.env"
 
+DOMAIN="$DOCKER_DIR/server"
+
 # Remote is always prod mode, to prevent debug in public
 APP_ENV=prod
 
@@ -144,12 +146,10 @@ echo ""
 echo "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR"
 echo ""
 
-DOMAIN="$DOCKER_DIR/server"
-
 cd "$PROJECT_DIR"
 
-"$DOMAIN" install-remote-prod
-"$DOMAIN" install-hooks
+su -c "$DOMAIN install-remote-prod" - "$SITE_USER"
+su -c "$DOMAIN install-hooks" - "$SITE_USER"
 
 source "$PROJECT_DIR_ENV"
 
