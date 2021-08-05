@@ -65,6 +65,10 @@ if [ "$DEPLOY_ENV" == "dev" ]; then
   DEPLOY_BRANCH="main-edge"
 fi
 
+if [ "$FQDN" != "" ]; then
+  HOSTNAME="$FQDN"
+fi
+
 export PROJECT_DIR
 export RELAY_DIR
 export DOCKER_DIR
