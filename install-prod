@@ -26,8 +26,16 @@ source "$INSTALL_ENV_VARS"
 # Delete .env-install file
 rm "$INSTALL_ENV_VARS"
 
+if [ -z "$APP_NAME" ]; then
+  SETUP_ERRORS+="APP_NAME variable is required."
+fi
+
 if [ -z "$DEPLOY_ENV" ]; then
   SETUP_ERRORS+="DEPLOY_ENV variable is required."
+fi
+
+if [ -z "$FQDN" ]; then
+  SETUP_ERRORS+="FQDN variable is required."
 fi
 
 if [ -z "$SITE_USER" ]; then
@@ -70,6 +78,7 @@ if [ "$FQDN" != "" ]; then
 fi
 
 export PROJECT_DIR
+export APP_NAME
 export RELAY_DIR
 export DOCKER_DIR
 export DEPLOY_ENV
@@ -146,8 +155,8 @@ su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
 
 cd "$PROJECT_DIR"
 
-su -c "cd $PROJECT_DIR; $DOMAIN install-remote-prod;" - "$SITE_USER"
-su -c "cd $PROJECT_DIR; $DOMAIN install-hooks;" - "$SITE_USER"
+"$DOMAIN" install-remote-prod
+"$DOMAIN" install-hooks
 
 source "$PROJECT_DIR_ENV"
 
