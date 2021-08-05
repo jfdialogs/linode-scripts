@@ -82,8 +82,9 @@ export APP_NAME
 export RELAY_DIR
 export DOCKER_DIR
 export DEPLOY_ENV
-export SITE_USER
+export FQDN
 export GIT_REPO
+export SITE_USER
 export SITE_USER_RSA_PRIV_KEY_VALUE
 export SITE_USER_RSA_PUB_KEY_VALUE
 
