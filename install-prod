@@ -161,6 +161,9 @@ cd "$PROJECT_DIR"
 
 source "$PROJECT_DIR_ENV"
 
+chown -R www-data "$RELAY_DIR"
+chgrp -R www-data "$RELAY_DIR"
+
 chown -R www-data "$PROJECT_DIR"
 chgrp -R www-data "$PROJECT_DIR"
 
