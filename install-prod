@@ -161,10 +161,10 @@ cd "$PROJECT_DIR"
 
 source "$PROJECT_DIR_ENV"
 
-chown -R www-data "$RELAY_DIR"
+chown -R "$SITE_USER" "$RELAY_DIR"
 chgrp -R www-data "$RELAY_DIR"
 
-chown -R www-data "$PROJECT_DIR"
+chown -R "$SITE_USER" "$PROJECT_DIR"
 chgrp -R www-data "$PROJECT_DIR"
 
 echo "" >> "/home/$SITE_USER/.bashrc"
