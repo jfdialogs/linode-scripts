@@ -153,7 +153,11 @@ chgrp "$SITE_USER" "$RELAY_DIR"
 
 git config --global http.postBuffer 524288000
 
-su -c "git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR" - "$SITE_USER"
+GIT_CLONE="git clone -b $DEPLOY_BRANCH $GIT_REPO $PROJECT_DIR"
+
+echo "Running... $GIT_CLONE"
+
+su -c "$GIT_CLONE" - "$SITE_USER"
 
 cd "$PROJECT_DIR"
 
